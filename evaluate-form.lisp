@@ -17,7 +17,7 @@
          ,(translate-ast ast var '())))))
 
 (defun evaluate-form (form env)
-  (funcall (compile nil (translate-form form env)) *env*))
+  (funcall (compile nil (translate-form form env)) env))
 
 (defun repl ()
   (let ((env (make-instance 'sicl-simple-environment:simple-environment)))
