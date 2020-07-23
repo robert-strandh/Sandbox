@@ -1,0 +1,16 @@
+(cl:in-package #:sandbox)
+
+(defun fill-environment (environment)
+  (do-symbols (symbol (find-package '#:common-lisp))
+    (when (boundp symbol)
+      (setf (sicl-genv:special-variable symbol environment t)
+            (symbol-value symbol)))
+    (when (fboundp symbol)
+      (cond ((special-operator-p symbol)
+             (setf (sicl-genv:special-operator symbol environment) t))
+            ((not (null (macro-function symbol)))
+             (setf (sicl-genv:macro-function symbol environment)
+                   (macro-function symbol)))
+            (t
+             (setf (sicl-genv:fdefinition symbol environment)
+                   (fdefinition symbol)))))))
